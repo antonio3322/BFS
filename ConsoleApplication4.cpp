@@ -33,7 +33,7 @@ int main() {
     vector<bool> Mark(n + 1, false);  // Посещённые вершины
     Mark[start] = true;
 
-    vector<int> Parent(n + 1, -1);  // Для восстановления пути
+    vector<int> Putty(n + 1, -1);  // Для восстановления пути
 
     while (!q.empty()) {
         int tmp = q.front();
@@ -46,7 +46,7 @@ int main() {
             if (!Mark[neighbor]) {
                 Mark[neighbor] = true;
                 Len[neighbor] = Len[tmp] + 1;
-                Parent[neighbor] = tmp;
+                Putty[neighbor] = tmp;
                 q.push(neighbor);
             }
         }
@@ -68,7 +68,7 @@ int main() {
     while (buf != -1) {
         Res.push_back(buf);
         if (buf == start) break;
-        buf = Parent[buf];
+        buf = Putty[buf];
     }
 
     // Выводим маршрут в обратном порядке (от конца к началу)
