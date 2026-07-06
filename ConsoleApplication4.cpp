@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <vector>
 #include <queue>
 
@@ -6,6 +6,7 @@ using namespace std;
 
 int main() {
     setlocale(LC_ALL, "RU");
+
     int n, m;
     cin >> n >> m;
 
@@ -20,26 +21,78 @@ int main() {
         G[b].push_back(a);
     }
 
-    int start, finish;
-    cin >> start >> finish;  // Вводим начальную и конечную вершины
+    vector<bool> MarkComp(n + 1, false);
+    int count = 0;
+    vector<vector<int>> Components;  // Для хранения вершин каждого компонента
 
-    // BFS
+    for (int start = 1; start <= n; start++) {
+        if (!MarkComp[start]) {
+            count++;
+            vector<int> component;
+
+            queue<int> q;
+            q.push(start);
+            MarkComp[start] = true;
+
+            while (!q.empty()) {
+                int v = q.front();
+                q.pop();
+                component.push_back(v);
+
+                for (int i = 0; i < G[v].size(); i++) {
+                    int neighbor = G[v][i];
+                    if (!MarkComp[neighbor]) {
+                        MarkComp[neighbor] = true;
+                        q.push(neighbor);
+                    }
+                }
+            }
+            Components.push_back(component);
+        }
+    }
+
+    // Вывод информации о компонентах
+    cout << count << endl;
+
+    for (int i = 0; i < Components.size(); i++) {
+        cout << "Компонент " << i + 1 << " (размер " << Components[i].size() << "): ";
+        for (int v : Components[i]) {
+            cout << v << " ";
+        }
+        cout << endl;
+    }
+
+    int start, finish;
+    cin >> start >> finish;
+
+    if (start < 1 || start > n || finish < 1 || finish > n) {
+        cout << "Неверные номера вершин!" << endl;
+        return 0;
+    }
+
+    // Если старт и финиш совпадают
+    if (start == finish) {
+        cout << "Расстояние: 0" << endl;
+        cout << "Путь: " << start << endl;
+        return 0;
+    }
+
+    // BFS для поиска пути
     queue<int> q;
     q.push(start);
 
-    vector<int> Len(n + 1, -1);  // Расстояния
+    vector<int> Len(n + 1, -1);
     Len[start] = 0;
 
-    vector<bool> Mark(n + 1, false);  // Посещённые вершины
+    vector<bool> Mark(n + 1, false);
     Mark[start] = true;
 
-    vector<int> Putty(n + 1, -1);  // Для восстановления пути
+    vector<int> Putty(n + 1, -1);
 
     while (!q.empty()) {
         int tmp = q.front();
         q.pop();
 
-        // Проходим по всем соседям вершины tmp
         for (int i = 0; i < G[tmp].size(); i++) {
             int neighbor = G[tmp][i];
 
@@ -54,28 +107,26 @@ int main() {
 
     // Проверяем, достижима ли конечная вершина
     if (Len[finish] == -1) {
-        cout << "Путь не существует!" << endl;
+        cout << "Путь не существует" << endl;
         return 0;
     }
 
     cout << Len[finish] << endl;
 
-    // Восстановление маршрута с конца
+    // Восстановление маршрута
     vector<int> Res;
     int buf = finish;
 
-    // Идём от finish к start по родителям
     while (buf != -1) {
         Res.push_back(buf);
         if (buf == start) break;
         buf = Putty[buf];
     }
 
-    // Выводим маршрут в обратном порядке (от конца к началу)
-    // Так как Res хранит путь от finish к start,
-    // выводим с конца вектора к началу
+    // Вывод маршрута
     for (int i = Res.size() - 1; i >= 0; i--) {
-        cout << Res[i] << " ";
+        cout << Res[i];
+        if (i > 0) cout << " -> ";
     }
     cout << endl;
 
