@@ -10,10 +10,8 @@ int main() {
     int n, m;
     cin >> n >> m;
 
-    // Создаём граф
     vector<vector<int>> G(n + 1);
 
-    // Читаем рёбра
     for (int i = 0; i < m; i++) {
         int a, b;
         cin >> a >> b;
@@ -23,16 +21,16 @@ int main() {
 
     vector<bool> MarkComp(n + 1, false);
     int count = 0;
-    vector<vector<int>> Components;  // Для хранения вершин каждого компонента
+    vector<vector<int>> Components;  
 
-    for (int start = 1; start <= n; start++) {
-        if (!MarkComp[start]) {
+    for (int i = 1; i <= n; i++) {
+        if (!MarkComp[i]) {
             count++;
             vector<int> component;
 
             queue<int> q;
             q.push(start);
-            MarkComp[start] = true;
+            MarkComp[i] = true;
 
             while (!q.empty()) {
                 int v = q.front();
@@ -51,11 +49,10 @@ int main() {
         }
     }
 
-    // Вывод информации о компонентах
     cout << count << endl;
 
     for (int i = 0; i < Components.size(); i++) {
-        cout << "Компонент " << i + 1 << " (размер " << Components[i].size() << "): ";
+        cout << "Компонента " << i + 1 << " (размером " << Components[i].size() << "): ";
         for (int v : Components[i]) {
             cout << v << " ";
         }
@@ -66,18 +63,16 @@ int main() {
     cin >> start >> finish;
 
     if (start < 1 || start > n || finish < 1 || finish > n) {
-        cout << "Неверные номера вершин!" << endl;
+        cout << "Неправельные номера вершин" << endl;
         return 0;
     }
 
-    // Если старт и финиш совпадают
     if (start == finish) {
-        cout << "Расстояние: 0" << endl;
+        cout << "Расстояние = 0" << endl;
         cout << "Путь: " << start << endl;
         return 0;
     }
 
-    // BFS для поиска пути
     queue<int> q;
     q.push(start);
 
@@ -105,15 +100,13 @@ int main() {
         }
     }
 
-    // Проверяем, достижима ли конечная вершина
     if (Len[finish] == -1) {
-        cout << "Путь не существует" << endl;
+        cout << "Пути не существует" << endl;
         return 0;
     }
 
     cout << Len[finish] << endl;
-
-    // Восстановление маршрута
+    
     vector<int> Res;
     int buf = finish;
 
@@ -123,12 +116,10 @@ int main() {
         buf = Putty[buf];
     }
 
-    // Вывод маршрута
     for (int i = Res.size() - 1; i >= 0; i--) {
         cout << Res[i];
-        if (i > 0) cout << " -> ";
+        if (i > 0) cout << " => ";
     }
     cout << endl;
-
     return 0;
 }
