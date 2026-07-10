@@ -29,7 +29,7 @@ int main() {
             vector<int> component;
 
             queue<int> q;
-            q.push(start);
+            q.push(i);
             MarkComp[i] = true;
 
             while (!q.empty()) {
