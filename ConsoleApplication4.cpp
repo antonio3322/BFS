@@ -21,7 +21,7 @@ int main() {
 
     vector<bool> MarkComp(n + 1, false);
     int count = 0;
-    vector<vector<int>> Components;  
+    vector<vector<int>> Components;
 
     for (int i = 1; i <= n; i++) {
         if (!MarkComp[i]) {
@@ -62,9 +62,14 @@ int main() {
     int start, finish;
     cin >> start >> finish;
 
-    if (start < 1 || start > n || finish < 1 || finish > n) {
-        cout << "Неправельные номера вершин" << endl;
-        return 0;
+    while (true) {
+        cin >> start >> finish;
+
+        if (start < 1 || start > n || finish < 1 || finish > n) {
+            cout << "Повторите ввод" << endl;
+            continue;  
+        }
+        break;  
     }
 
     if (start == finish) {
@@ -106,7 +111,7 @@ int main() {
     }
 
     cout << Len[finish] << endl;
-    
+
     vector<int> Res;
     int buf = finish;
 
